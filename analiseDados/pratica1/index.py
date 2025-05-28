@@ -101,7 +101,7 @@ st.subheader('4. A expectativa de vida tem correlação positiva ou negativa com
 
 # Alcool
 correlacaoAlcoolExpectativaVida = df[['Alcohol', 'Life expectancy']].corr()
-st.write("O coeficiente de correlação entre o consumo de alcool e a taxa de mortalidade adulta é: ")
+st.write("O coeficiente de correlação entre o consumo de alcool e a expectativa de vida é: ")
 st.write(correlacaoAlcoolExpectativaVida)
 
 fig1, ax1 = plt.subplots()
