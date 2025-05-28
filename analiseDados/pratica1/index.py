@@ -20,10 +20,10 @@ df = df[df['Status'] == 'Developing']
 st.header("Estatísticas sobre a expectativa de vida dos Países")
 
 
-st.write('1. Os vários fatores de previsão inicialmente escolhidos realmente afetam a expectativa devida?') 
+st.subheader('1. Os vários fatores de previsão inicialmente escolhidos realmente afetam a expectativa devida?') 
 
 
-st.write('2. Um país com menor expectativa de vida (<65) deve aumentar seus gastos com saúde para melhorar sua expectativa de vida média?')
+st.subheader('2. Um país com menor expectativa de vida (<65) deve aumentar seus gastos com saúde para melhorar sua expectativa de vida média?')
 
 # Média da expectativa de vida dos países que tem a média de expectativa de vida menor que 65
 # Expectativa de vida ao longo dos anos
@@ -67,12 +67,13 @@ st.write("A média da expectativa de vida dos países que possuem a média de ga
 st.write('Conclusão da pergunta 2:')
 st.write("Os dados mostram que os países com expectativa de vida maior que 65 anos tendem a apresentar uma média maior de gasto com saúde (% do PIB), " \
 "sugerindo que o investimento em saúde pública pode estar associado a uma maior expectativa de vida.")
+st.write('\n')
 
 
-st.write('3. Como as taxas de mortalidade infantil e adulta afetam a expectativa de vida?')
+st.subheader('3. Como as taxas de mortalidade infantil e adulta afetam a expectativa de vida?')
 
 
-st.write('4. A expectativa de vida tem correlação positiva ou negativa com hábitos alimentares, estilo de vida, exercícios, fumo, consumo de álcool etc.')
+st.subheader('4. A expectativa de vida tem correlação positiva ou negativa com hábitos alimentares, estilo de vida, exercícios, fumo, consumo de álcool etc.')
 # Alcohol
 correlacaoAlcoolMortalidadeAdulta = df[['Alcohol', 'Adult Mortality']].corr()
 st.write("O coeficiente de correlação entre o consumo de alcool e a taxa de mortalidade adulta é: ")
@@ -95,17 +96,23 @@ st.write('Conclusões da pergunta 4:')
 st.write('As correlações entre o consumo de alcool e a hepatitis b com as mortalidades adulta e infantil mostram que' \
 ' esses hábitos não influenciam diretamente na taxa de mortalidade. ' \
 'Todavia, esses dados não demonstram que o alcool não tem nenhum impacto na saude, apenas que não tem correlação direta.')
+st.write('\n')
 
 
-# 5. Qual é o impacto da escolaridade na expectativa de vida dos seres humanos?
+st.subheader('5. Qual é o impacto da escolaridade na expectativa de vida dos seres humanos?')
 correlacaoEscolaridadeExpectativa = df[['Schooling', 'Life expectancy']].corr()
-print(correlacaoEscolaridadeExpectativa)
+st.write("A correlação entre a escolaridade e a expectativa de vida é: ")
+st.write(correlacaoEscolaridadeExpectativa)
 
-sns.scatterplot(x='Schooling', y='Life expectancy', data=df)
+fig1, ax1 = plt.subplots()
+sns.scatterplot(x='Schooling', y='Life expectancy', data=df, ax=ax1)
 plt.title("Dispersão entre a escolaridade e a expectativa de vida")
 plt.xlabel("Escolaridade")
 plt.ylabel("Expectativa de vida")
-plt.show()
+plt.xlim(-4, 20)
+st.pyplot(fig1)
 
-# Conclusões da pergunta 5:
-# 
+st.write("Conclusões da pergunta 5:")
+st.write("Com base no coeficiente entre a expectativa de vida e a escolaridade, percebe-se que, " \
+"o coeficiente esta próximo de 1, ou seja, quando a escolaridade aumenta a expectativa tambem aumenta, " \
+"demonstrando que um maior investimento na educação ajuda no crescimento da expectativa de vida.")
