@@ -15,21 +15,24 @@ df = pd.read_csv("analiseDados/pratica1/Life_Expectancy_Data.csv", sep=',', enco
 # 7. Países densamente povoados tendem a ter menor expectativa de vida?
 # 8. Qual é o impacto da cobertura de imunização na expectativa de vida?
 
-# Pegando apenas os países em desenvolvimento
+# Cabeçalho
 df = df[df['Status'] == 'Developing']
+st.header("Estatísticas sobre a expectativa de vida dos Países")
 
-# Pergunta 1
+
+st.write('1. Os vários fatores de previsão inicialmente escolhidos realmente afetam a expectativa devida?') 
 
 
-# Pergunta 2
+st.write('2. Um país com menor expectativa de vida (<65) deve aumentar seus gastos com saúde para melhorar sua expectativa de vida média?')
 
 # Média da expectativa de vida dos países que tem a média de expectativa de vida menor que 65
 # Expectativa de vida ao longo dos anos
-# sns.lineplot(x='Year', y='Life expectancy', data=df, legend=False)
-# plt.title("Espectativa de vida por país ao longo dos anos")
-# plt.xlabel("Ano")
-# plt.ylabel("Espectativa de vida")
-# plt.show()
+fig, ax = plt.subplots()
+sns.lineplot(x='Year', y='Life expectancy', data=df, legend=False, ax=ax)
+plt.title("Espectativa de vida por país ao longo dos anos")
+plt.xlabel("Ano")
+plt.ylabel("Espectativa de vida")
+st.pyplot(fig)
 
 porPais = df.groupby('Country')['Life expectancy'].mean().sort_values()
 menor65 = porPais[porPais < 65]
@@ -44,7 +47,7 @@ menor65Linhas['percentage expenditure'] = (
 )
 
 mediaExpectativaMenorPaises65 = menor65Linhas['percentage expenditure'].mean()
-print('{:.2f}' .format(mediaExpectativaMenorPaises65))
+st.write("A média da expectativa de vida dos países que possuem a média de gastos menor que 65 é: {:.2f}" .format(mediaExpectativaMenorPaises65))
 
 # Média da expectativa de vida dos países que tem a média de expectativa de vida maior que 65
 
@@ -59,8 +62,50 @@ maior65Linhas['percentage expenditure'] = (
 )
 
 mediaExpectativaMaiorPaises65 = maior65Linhas['percentage expenditure'].mean()
-print('{:.2f}' .format(mediaExpectativaMaiorPaises65))
+st.write("A média da expectativa de vida dos países que possuem a média de gastos maior que 65 é: {:.2f}" .format(mediaExpectativaMaiorPaises65))
 
-# Conclusão da pergunta 2:
-# Os dados mostram que os países com expectativa de vida maior que 65 anos tendem a apresentar uma média maior de gasto com saúde (% do PIB),
-# sugerindo que o investimento em saúde pública pode estar associado a uma maior expectativa de vida.
+st.write('Conclusão da pergunta 2:')
+st.write("Os dados mostram que os países com expectativa de vida maior que 65 anos tendem a apresentar uma média maior de gasto com saúde (% do PIB), " \
+"sugerindo que o investimento em saúde pública pode estar associado a uma maior expectativa de vida.")
+
+
+st.write('3. Como as taxas de mortalidade infantil e adulta afetam a expectativa de vida?')
+
+
+st.write('4. A expectativa de vida tem correlação positiva ou negativa com hábitos alimentares, estilo de vida, exercícios, fumo, consumo de álcool etc.')
+# Alcohol
+correlacaoAlcoolMortalidadeAdulta = df[['Alcohol', 'Adult Mortality']].corr()
+st.write("O coeficiente de correlação entre o consumo de alcool e a taxa de mortalidade adulta é: ")
+st.write(correlacaoAlcoolMortalidadeAdulta)
+
+correlacaoAlcoolMortalidadeInfantil = df[['Alcohol', 'infant deaths']].corr()
+st.write("O coeficiente de correlação entre o consumo de alcool e a taxa de mortalidade infantil é: ")
+st.write(correlacaoAlcoolMortalidadeInfantil)
+
+# Hepatitis B
+correlacaoHepatitisAdulto = df[['Hepatitis B', 'Adult Mortality']].corr()
+st.write("O coeficiente de correlação entre a Hepatitis B e a taxa de mortalidade adulta é: ")
+st.write(correlacaoHepatitisAdulto)
+
+correlacaoHepatitisInfantil = df[['Hepatitis B', 'infant deaths']].corr()
+st.write("O coeficiente de correlação entre a Hepatitis B e a taxa de mortalidade infantil é: ")
+st.write(correlacaoHepatitisInfantil)
+
+st.write('Conclusões da pergunta 4:')
+st.write('As correlações entre o consumo de alcool e a hepatitis b com as mortalidades adulta e infantil mostram que' \
+' esses hábitos não influenciam diretamente na taxa de mortalidade. ' \
+'Todavia, esses dados não demonstram que o alcool não tem nenhum impacto na saude, apenas que não tem correlação direta.')
+
+
+# 5. Qual é o impacto da escolaridade na expectativa de vida dos seres humanos?
+correlacaoEscolaridadeExpectativa = df[['Schooling', 'Life expectancy']].corr()
+print(correlacaoEscolaridadeExpectativa)
+
+sns.scatterplot(x='Schooling', y='Life expectancy', data=df)
+plt.title("Dispersão entre a escolaridade e a expectativa de vida")
+plt.xlabel("Escolaridade")
+plt.ylabel("Expectativa de vida")
+plt.show()
+
+# Conclusões da pergunta 5:
+# 
