@@ -72,6 +72,28 @@ st.write('\n')
 
 st.subheader('3. Como as taxas de mortalidade infantil e adulta afetam a expectativa de vida?', divider='grey')
 
+correlacaoMortalidadeAdultaExpectativa = df[['Life expectancy', 'Adult Mortality']].corr()
+st.write("O coeficiente de correlação entre a expectativa de vida e a taxa de mortalidade adulta é: ")
+st.write(correlacaoMortalidadeAdultaExpectativa)
+
+fig1, ax1 = plt.subplots()
+sns.regplot(x='Adult Mortality', y='Life expectancy', data=df, ax=ax1)
+plt.title("Dispersão a mortalidade adulta e a expectativa de vida")
+plt.xlabel("Mortalidade adulta")
+plt.ylabel("Expectativa de vida")
+st.pyplot(fig1)
+
+correlacaoMortalidadeInfantilExpectativa = df[['Life expectancy', 'infant deaths']].corr()
+st.write("O coeficiente de correlação entre a expectativa de vida e a taxa de mortalidade infantil é: ")
+st.write(correlacaoMortalidadeInfantilExpectativa)
+
+fig2, ax2 = plt.subplots()
+sns.regplot(x='Life expectancy', y='infant deaths', data=df, ax=ax2)
+plt.title("Dispersão entre a expectativa de vida e a mortalidade infantil")
+plt.xlabel("Life expectancy")
+plt.ylabel("Mortalidade infantil")
+st.pyplot(fig2)
+
 
 st.subheader('4. A expectativa de vida tem correlação positiva ou negativa com hábitos alimentares, estilo de vida, exercícios, fumo, consumo de álcool etc.', divider='grey')
 
