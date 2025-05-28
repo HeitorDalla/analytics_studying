@@ -116,3 +116,19 @@ st.write("Conclusões da pergunta 5:")
 st.write("Com base no coeficiente entre a expectativa de vida e a escolaridade, percebe-se que, " \
 "o coeficiente esta próximo de 1, ou seja, quando a escolaridade aumenta a expectativa tambem aumenta, " \
 "demonstrando que um maior investimento na educação ajuda no crescimento da expectativa de vida.")
+
+
+st.subheader("6. A expectativa de vida tem relação positiva ou negativa com o consumo de álcool? ")
+
+correlacaoAlcoolMortalidadeAdulta = df[['Alcohol', 'Adult Mortality']].corr()
+st.write("O coeficiente de correlação entre o consumo de alcool e a taxa de mortalidade adulta é: ")
+st.write(correlacaoAlcoolMortalidadeAdulta)
+
+correlacaoAlcoolMortalidadeInfantil = df[['Alcohol', 'infant deaths']].corr()
+st.write("O coeficiente de correlação entre o consumo de alcool e a taxa de mortalidade infantil é: ")
+st.write(correlacaoAlcoolMortalidadeInfantil)
+
+st.write('Conclusões da pergunta 6:')
+st.write('Com base nos coeficientes demonstradas a cima, quanto mais proximo do negativo, menos ligação entre as variáveis exite. Portanto é evidente que o alcool não tem ligação direta com a expectativa de vida. '
+'OBS: mesmo com dados lineares, não é possível alegar que o alcool não faz mal ao ser humano!')
+st.write('\n')
