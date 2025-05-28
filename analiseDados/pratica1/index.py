@@ -84,7 +84,7 @@ st.write(correlacaoAlcoolMortalidadeInfantil)
 
 # Hepatitis B
 correlacaoHepatitisAdulto = df[['Hepatitis B', 'Adult Mortality']].corr()
-st.write("O coeficiente de correlação entre a Hepatitis B e a taxa de mortalidade adulta é: ")
+st.write("O coeficiente de correlação entre a Hepatitis B   e a taxa de mortalidade adulta é: ")
 st.write(correlacaoHepatitisAdulto)
 
 correlacaoHepatitisInfantil = df[['Hepatitis B', 'infant deaths']].corr()
