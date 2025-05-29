@@ -33,8 +33,8 @@ create table if not exists livros (
     categoria_id integer not null,
     ano text not null,
     quantidade_disponivel integer not null,
-    foreing key (autor_id) references autores (id),
-    foreing key categoria_id references categorias (id)
+    foreign key (autor_id) references autores (id),
+    foreign key (categoria_id) references categorias (id)
 )
 ''')
 
@@ -43,8 +43,8 @@ cursor.execute('''
 create table if not exists emprestimos (
     id integer primary key autoincrement,
     livro_id integer not null,
-    data_emprestimo test not null,
-    devolvido integer not null,
-    foreing key (livro_id) references livros (id)
+    data_emprestimo text not null,
+    devolvido integer not null check (devolvido in (0, 1)),
+    foreign key (livro_id) references livros (id)
 )
 ''')
