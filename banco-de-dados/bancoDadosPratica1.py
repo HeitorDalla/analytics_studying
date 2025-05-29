@@ -135,3 +135,23 @@ if cursor.fetchone()[0] == 0:
 
     conn.commit()
 
+# Streamlit
+
+# Título principal
+st.title('Prática com SQLite, Python e Streamlit')
+
+# Todos os livros com nome do livro, autor e da categoria
+st.subheader("Todos os livros com nome do livro, autor e da categoria", divider='grey')
+st.write('\n')
+
+df = pd.read_sql_query('''
+    select
+        l.titulo as `Nome do livro`,
+        a.nome as `Nome do autor`,
+        c.nome as `Nome da categorias`
+    from livros l
+    inner join categorias c on l.categoria_id = c.id
+    inner join autores a on l.autor_id = a.id
+''', conn)
+st.dataframe(df)
+st.write('\n')
