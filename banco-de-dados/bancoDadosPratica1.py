@@ -114,3 +114,24 @@ if cursor.fetchone()[0] == 0:
 
     conn.commit()
 
+# Inserção de dados na tabela emprestimos
+cursor.execute('select count(*) from emprestimos')
+
+if cursor.fetchone()[0] == 0:
+    emprestimos_inserir = [
+        (1, '2025-05-01', 1),
+        (2, '2025-05-05', 0),
+        (3, '2025-04-20', 1),
+        (4, '2025-05-10', 0),
+        (5, '2025-05-15', 1),
+        (6, '2025-05-18', 0),
+        (7, '2025-05-12', 1),
+        (8, '2025-05-21', 0),
+        (9, '2025-05-25', 1),
+        (10, '2025-05-27', 0)
+    ]
+
+    cursor.executemany('insert into emprestimos (livro_id, data_emprestimo, devolvido) values (?, ?, ?)', emprestimos_inserir)
+
+    conn.commit()
+
