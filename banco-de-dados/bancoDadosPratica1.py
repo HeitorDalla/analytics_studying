@@ -184,3 +184,23 @@ livroAno = pd.read_sql_query('''
 
 st.dataframe(livroAno)
 st.write('\n')
+
+
+# Quantidade total de livros, de empréstimos e devolvidos
+st.subheader("Quantidade total de livros, de empréstimos e devolvidos", divider='grey')
+st.write("\n")
+
+cursor.execute('select count(*) from emprestimos')
+totalLivros = cursor.fetchone()[0]
+
+cursor.execute('select count(*) from emprestimos where devolvido = 0')
+qtdDevolvido = cursor.fetchone()[0]
+
+cursor.execute('select count(*) from emprestimos where devolvido = 1')
+qtdNaoDevolvido = cursor.fetchone()[0]
+
+st.write("O total de livros é: {}" .format(totalLivros))
+st.write("O total de livros devolvidos é: {}" .format(qtdDevolvido))
+st.write("O total de livros não devolvidos é: {}" .format(qtdNaoDevolvido))
+
+st.write('\n')
