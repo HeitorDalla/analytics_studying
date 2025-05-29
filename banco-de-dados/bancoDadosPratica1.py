@@ -140,6 +140,7 @@ if cursor.fetchone()[0] == 0:
 # Título principal
 st.title('Prática com SQLite, Python e Streamlit')
 
+
 # Todos os livros com nome do livro, autor e da categoria
 st.subheader("Todos os livros com nome do livro, autor e da categoria", divider='grey')
 st.write('\n')
@@ -156,8 +157,30 @@ df = pd.read_sql_query('''
 st.dataframe(df)
 st.write('\n')
 
+
 # Filtro de livros por ano de publicação
 st.subheader("Filtro de livros por ano de publicação", divider='grey')
 st.write("\n")
 
-st.dataframe(df)
+# Buscar anos únicos de publicação
+df_anos = pd.read_sql_query('''
+    select
+        distinct l.ano as `Ano de publicação`
+    from livros l
+    order by `Ano de publicação`
+''', conn)
+
+# Opções de escolha para o usuário
+anosEscolha = st.selectbox('Ano de publicaçao', df_anos['Ano de publicação'])
+
+# Buscar todos os livros filtrado pelo ano de publicação escolhido
+livroAno = pd.read_sql_query('''
+    select
+        l.titulo as `Nome do livro`
+    from livros l
+    where l.ano = ?
+    order by l.ano
+''', conn, params=(anosEscolha,))
+
+st.dataframe(livroAno)
+st.write('\n')
