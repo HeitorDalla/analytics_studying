@@ -6,5 +6,13 @@ import pandas as pd
 import streamlit as st
 
 conn = sqlite3.connect('ecommerce.db') # Criando a conexão com banco de dados
-cursos = conn.cursor() # Executor de comandos
+cursor = conn.cursor() # Executor de comandos
 
+# Criando tabela de emprestimos
+cursos.execute('''
+create table if not exists emprestimos(
+    id integer primary key autoincrement,
+    data_emprestimo test not null,
+    devolvido integer not null
+)
+''')
