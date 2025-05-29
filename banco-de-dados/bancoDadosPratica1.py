@@ -8,11 +8,27 @@ import streamlit as st
 conn = sqlite3.connect('ecommerce.db') # Criando a conexão com banco de dados
 cursor = conn.cursor() # Executor de comandos
 
-# Criando tabela de emprestimos
-cursos.execute('''
-create table if not exists emprestimos(
+# Criando tabela de livros
+cursor.execute('''
+create table if not exists livros (
     id integer primary key autoincrement,
+    titulo text not null,
+    autor_id integer not null,
+    categoria_id integer not null,
+    ano text not null,
+    quantidade_disponivel integer not null,
+    foreing key (autor_id) references autores (id),
+    foreing key categoria_id references categorias (id)
+)
+''')
+
+# Criando tabela de emprestimos
+cursor.execute('''
+create table if not exists emprestimos (
+    id integer primary key autoincrement,
+    livro_id integer not null,
     data_emprestimo test not null,
-    devolvido integer not null
+    devolvido integer not null,
+    foreing key (livro_id) references livros (id)
 )
 ''')
