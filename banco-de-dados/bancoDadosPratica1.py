@@ -48,3 +48,27 @@ create table if not exists emprestimos (
     foreign key (livro_id) references livros (id)
 )
 ''')
+
+conn.commit()
+
+# Inserção dos dados da tabela autores
+cursor.execute('select count(*) from autores')
+resultado = cursor.fetchone()[0]
+if resultado == 0:
+    produtos_inserir = [
+        ('Alice Monteiro',),
+        ('Bruno Cardoso',),
+        ('Camila Figueiredo',),
+        ('Daniel Vasques',),
+        ('Elisa Moura',),
+        ('Felipe Andrade',),
+        ('Gabriela Tavares',),
+        ('Henrique Silveira',),
+        ('Isabela Nunes',),
+        ('João Pedro Ribeiro',)
+    ]
+
+    cursor.executemany('insert into autores (nome) values (?)', produtos_inserir)
+
+    conn.commit()
+
