@@ -205,6 +205,7 @@ st.write("O total de livros não devolvidos é: {}" .format(qtdNaoDevolvido))
 
 st.write('\n')
 
+
 # 4 - Número de livros por categoria (agrupado)
 st.subheader("Número de livros por categoria (agrupado)")
 st.write("\n")
