@@ -155,3 +155,9 @@ df = pd.read_sql_query('''
 ''', conn)
 st.dataframe(df)
 st.write('\n')
+
+# Filtro de livros por ano de publicação
+st.subheader("Filtro de livros por ano de publicação", divider='grey')
+st.write("\n")
+
+st.dataframe(df)
