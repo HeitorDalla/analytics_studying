@@ -55,7 +55,7 @@ conn.commit()
 cursor.execute('select count(*) from autores')
 
 if cursor.fetchone()[0] == 0:
-    produtos_inserir = [
+    autores_inserir = [
         ('Alice Monteiro',),
         ('Bruno Cardoso',),
         ('Camila Figueiredo',),
@@ -68,7 +68,7 @@ if cursor.fetchone()[0] == 0:
         ('João Pedro Ribeiro',)
     ]
 
-    cursor.executemany('insert into autores (nome) values (?)', produtos_inserir)
+    cursor.executemany('insert into autores (nome) values (?)', autores_inserir)
 
     conn.commit()
 
@@ -90,6 +90,27 @@ if cursor.fetchone()[0] == 0:
     ]
 
     cursor.executemany('insert into categorias (nome) values (?)', categorias_inserir)
+
+    conn.commit()
+
+# Inserção de dados na tabela livros
+cursor.execute('select count(*) from livros')
+
+if cursor.fetchone()[0] == 0:
+    livros_inserir = [
+        ('O Amor em Tempos Modernos', 1, 1, '2018', 5),
+        ('Além das Estrelas', 2, 2, '2020', 3),
+        ('A Vida de Einstein', 3, 3, '2016', 2),
+        ('Brasil Colonial', 4, 4, '2014', 4),
+        ('Desperte o Gigante Interior', 5, 5, '2010', 6),
+        ('Inteligência Artificial Hoje', 6, 6, '2023', 7),
+        ('Reinos Esquecidos', 7, 7, '2019', 2),
+        ('O Mistério da Noite', 8, 8, '2022', 5),
+        ('Mente e Emoção', 9, 9, '2017', 4),
+        ('Empreender com Propósito', 10, 10, '2021', 8)
+    ]
+
+    cursor.executemany('insert into livros (titulo, autor_id, categoria_id, ano, quantidade_disponivel) values (?, ?, ?, ?, ?)', livros_inserir)
 
     conn.commit()
 
