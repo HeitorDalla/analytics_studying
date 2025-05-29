@@ -3,163 +3,59 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
-df = pd.read_csv("analiseDados/pratica1/Life_Expectancy_Data.csv", sep=',', encoding='utf-8')
+df = pd.read_csv('analiseDados/pratica1/clientes - clientes.csv', sep=',', encoding='utf-8')
 
-# 1. Os vários fatores de previsão inicialmente escolhidos realmente afetam a expectativa devida? 
-# Quais são as variáveis de previsão que realmente afetam a expectativa de vida?
-# 2. Um país com menor expectativa de vida (<65) deve aumentar seus gastos com saúde para melhorar sua expectativa de vida média?
-# 3. Como as taxas de mortalidade infantil e adulta afetam a expectativa de vida?
-# 4. A expectativa de vida tem correlação positiva ou negativa com hábitos alimentares, estilo de vida, exercícios, fumo, consumo de álcool etc.
-# 5. Qual é o impacto da escolaridade na expectativa de vida dos seres humanos?
-# 6. A expectativa de vida tem relação positiva ou negativa com o consumo de álcool?
-# 7. Países densamente povoados tendem a ter menor expectativa de vida?
-# 8. Qual é o impacto da cobertura de imunização na expectativa de vida?
+clientesCancelados = df[df['Categoria'] == 'Cancelado']
 
-# Cabeçalho
-df = df[df['Status'] == 'Developing']
-st.header("Estatísticas sobre a expectativa de vida dos Países")
-
-
-st.subheader('1. Os vários fatores de previsão inicialmente escolhidos realmente afetam a expectativa devida?', divider='grey') 
-
-
-st.subheader('2. Um país com menor expectativa de vida (<65) deve aumentar seus gastos com saúde para melhorar sua expectativa de vida média?', divider='grey')
-
-# Média da expectativa de vida dos países que tem a média de expectativa de vida menor que 65
-# Expectativa de vida ao longo dos anos
-porPais = df.groupby('Country')['Life expectancy'].mean().sort_values()
-menor65 = porPais[porPais < 65]
-
-menor65Linhas = df[df['Country'].isin(menor65.index)].copy()
-
-menor65Linhas['percentage expenditure'] = (
-    menor65Linhas['percentage expenditure']
-    .str.replace('.', '')
-    .str.replace(',', '.')
-    .astype(float)
-)
-
-fig, ax = plt.subplots()
-sns.lineplot(x='Year', y='Life expectancy', data=df, legend=False, ax=ax)
-plt.title("Espectativa de vida por país ao longo dos anos")
-plt.xlabel("Ano")
-plt.ylabel("Espectativa de vida")
-st.pyplot(fig)
-
-mediaExpectativaMenorPaises65 = menor65Linhas['percentage expenditure'].mean()
-st.write("A média da expectativa de vida dos países que possuem a média de gastos menor que 65 é: {:.2f}" .format(mediaExpectativaMenorPaises65))
-
-# Média da expectativa de vida dos países que tem a média de expectativa de vida maior que 65
-
-maior65 = porPais[porPais > 65]
-
-maior65Linhas = df[df['Country'].isin(maior65.index)].copy()
-
-maior65Linhas['percentage expenditure'] = (
-    maior65Linhas['percentage expenditure']
-    .str.replace('.', '', regex=False)
-    .astype(float)
-)
-
-mediaExpectativaMaiorPaises65 = maior65Linhas['percentage expenditure'].mean()
-st.write("A média da expectativa de vida dos países que possuem a média de gastos maior que 65 é: {:.2f}" .format(mediaExpectativaMaiorPaises65))
-
-st.write('Conclusão da pergunta 2:')
-st.write("Os dados mostram que os países com expectativa de vida maior que 65 anos tendem a apresentar uma média maior de gasto com saúde (% do PIB), " \
-"sugerindo que o investimento em saúde pública pode estar associado a uma maior expectativa de vida.")
-st.write('\n')
-
-
-st.subheader('3. Como as taxas de mortalidade infantil e adulta afetam a expectativa de vida?', divider='grey')
-
-correlacaoMortalidadeAdultaExpectativa = df[['Life expectancy', 'Adult Mortality']].corr()
-st.write("O coeficiente de correlação entre a expectativa de vida e a taxa de mortalidade adulta é: ")
-st.write(correlacaoMortalidadeAdultaExpectativa)
-
+st.subheader("Análise por Distribuição salarial")
+# Histograma - Distribuição de frequência pela faixa salarial
 fig1, ax1 = plt.subplots()
-sns.regplot(x='Adult Mortality', y='Life expectancy', data=df, ax=ax1)
-plt.title("Dispersão a mortalidade adulta e a expectativa de vida")
-plt.xlabel("Mortalidade adulta")
-plt.ylabel("Expectativa de vida")
+ax1.hist(clientesCancelados['Faixa Salarial Anual'], bins=10)
+ax1.set_title("Distribuição de Salários dos clientes Cancelados")
+ax1.set_xlabel("Salário")
+ax1.set_ylabel("Frequência")
 st.pyplot(fig1)
+st.write("Com base na análise da distribuição salarial dos clientes que cancelaram o cartão, é notório que quanto mais baixo o salário anual, maior a probabilidade do cancelamento acontecer.")
+st.write("\n")
 
-correlacaoMortalidadeInfantilExpectativa = df[['Life expectancy', 'infant deaths']].corr()
-st.write("O coeficiente de correlação entre a expectativa de vida e a taxa de mortalidade infantil é: ")
-st.write(correlacaoMortalidadeInfantilExpectativa)
-
-fig2, ax2 = plt.subplots()
-sns.regplot(x='Life expectancy', y='infant deaths', data=df, ax=ax2)
-plt.title("Dispersão entre a expectativa de vida e a mortalidade infantil")
-plt.xlabel("Life expectancy")
-plt.ylabel("Mortalidade infantil")
+st.subheader("Análise por Quantidade de Transações")
+# Faixa salarial por Qtde Transacoes 12m
+fig2, ax2 = plt.subplots(figsize=(12, 4))
+sns.countplot(x='Faixa Salarial Anual', hue='Qtde Transacoes 12m', data=clientesCancelados, ax=ax2)
+ax2.set_title("Clientes cancelados por Faixa salarial e Qtde Transacoes 12m")
+ax2.set_xlabel("Faixa Salarial Anual")
+ax2.set_ylabel("Contagem")
 st.pyplot(fig2)
+st.write("Pessoas com menor renda apresentam maior volume de transações, o que pode indicar uso mais frequente do cartão, talvez por necessidade ou falta de alternativas de crédito.")
+st.write("\n")
 
-# FAZER A CONCLUSÃO
-
-
-st.subheader('4. A expectativa de vida tem correlação positiva ou negativa com hábitos alimentares, estilo de vida, exercícios, fumo, consumo de álcool etc.', divider='grey')
-
-# Alcool
-correlacaoAlcoolExpectativaVida = df[['Alcohol', 'Life expectancy']].corr()
-st.write("O coeficiente de correlação entre o consumo de alcool e a expectativa de vida é: ")
-st.write(correlacaoAlcoolExpectativaVida)
-
-fig1, ax1 = plt.subplots()
-sns.regplot(x='Alcohol', y='Life expectancy', data=df, ax=ax1)
-plt.title("Dispersão entre o consumo de alcool e a expectativa de vida")
-plt.xlabel("Alcool")
-plt.ylabel("Expectativa de vida")
-st.pyplot(fig1)
-
-# Desnutrição dos 1-19 anos
-correlacaoDesnutricaoExpectativaVida = df[['thinness  1-19 years', 'Life expectancy']].corr()
-st.write("O coeficiente de correlação entre a desnutrição dos 1-19 anos e a expectativa de vida é: ")
-st.write(correlacaoDesnutricaoExpectativaVida)
-
-fig3, ax3 = plt.subplots()
-sns.regplot(x='thinness  1-19 years', y='Life expectancy', data=df, ax=ax3)
-plt.title("Dispersão entre a Desnutrição dos 1-19 anos e a expectativa de vida")
-plt.xlabel("Desnutrição dos 1-19 anos")
-plt.ylabel("Expectativa de Vida")
+st.subheader("Análise por Produtos Contratados")
+# Categoria de Cartao por Produtos Contratado
+fig3, ax3 = plt.subplots(figsize=(12, 4))
+sns.countplot(x='Categoria Cartão', hue='Produtos Contratados', data=clientesCancelados, ax=ax3)
+ax3.set_title("Clientes cancelados por Categoria Cartão e Produtos Contratados")
+ax3.set_xlabel("Categoria Cartão")
+ax3.set_ylabel("Contagem")
 st.pyplot(fig3)
+st.write("Ao analisar o gráfico, é possivel ver que a maioria dos cancelamentos ocorre com quem tem o cartão blue. Isso sugere que os clientes com planos mais básicos estão propensos a comprar contratar menos produtos, e com isso, estão mais propensos com o cancelamento da conta.")
+st.write("\n")
 
-# FAZER CONCLUSÃO
+st.subheader("Análise por Dependentes")
+# Dependentes por faixa salarial
+fig4, ax4 = plt.subplots(figsize=(12, 4))
+sns.countplot(x='Dependentes', hue='Faixa Salarial Anual', data=clientesCancelados, ax=ax4)
+ax4.set_title("Dependentes por faixa salarial")
+ax4.set_xlabel("Dependentes")
+ax4.set_ylabel("Contagem")
+st.pyplot(fig4)
+st.write("Analisando o gráfico, é possível observar que muitas pessoas que cancelaram suas contas possuem mais de 2 dependentes, levando ao pensamento que a pressão familiar existe, levando ao cancelamento da conta.")
+st.write("\n")
 
-
-st.subheader('5. Qual é o impacto da escolaridade na expectativa de vida dos seres humanos?', divider='grey')
-
-correlacaoEscolaridadeExpectativa = df[['Schooling', 'Life expectancy']].corr()
-st.write("A correlação entre a escolaridade e a expectativa de vida é: ")
-st.write(correlacaoEscolaridadeExpectativa)
-
-fig5, ax5 = plt.subplots()
-sns.scatterplot(x='Schooling', y='Life expectancy', data=df, ax=ax5)
-plt.title("Dispersão entre a escolaridade e a expectativa de vida")
-plt.xlabel("Escolaridade")
-plt.ylabel("Expectativa de vida")
-plt.xlim(-4, 20)
-st.pyplot(fig5)
-
-st.write("Conclusões da pergunta 5:")
-st.write("Com base no coeficiente entre a expectativa de vida e a escolaridade, percebe-se que, " \
-"o coeficiente esta próximo de 1, ou seja, quando a escolaridade aumenta a expectativa tambem aumenta, " \
-"demonstrando que um maior investimento na educação ajuda no crescimento da expectativa de vida.")
-
-
-st.subheader("6. A expectativa de vida tem relação positiva ou negativa com o consumo de álcool?", divider='grey')
-
-correlacaoAlcoolExpectativa = df[['Alcohol', 'Life expectancy']].corr()
-st.write("A correlação entre a expectativa de vida e o consumo de alcool é: ")
-st.write(correlacaoAlcoolExpectativa)
-
-fig6, ax6 = plt.subplots()
-sns.regplot(x='Alcohol', y='Life expectancy', data=df, ax=ax6, scatter_kws={"alpha":0.5})
-plt.title("Gráfico de dispersão para a expectativa de vida com o consumo de alcool")
-plt.xlabel("Alcool")
-plt.ylabel("Expectativa de vida")
-st.pyplot(fig6)
-
-st.write('Conclusões da pergunta 6:')
-st.write('Com base no coeficiente demonstrado a cima, quanto mais proximo do 0, menos ligação entre as variáveis exite. Portanto é evidente que o alcool não tem ligação direta com a expectativa de vida. '
-'OBS: mesmo com dados lineares, não é possível alegar que o alcool não faz mal ao ser humano!')
-st.write('\n')
+st.subheader("Plano de Ação")
+st.markdown("""
+- Clientes com **menor faixa salarial**, **muitos dependentes**, **categoria de cartão básica (blue)** e **baixa diversidade de produtos contratados** tendem a cancelar mais.
+- Recomendamos:
+  - Oferecer **benefícios personalizados** para clientes da base Blue.
+  - Criar **campanhas de engajamento** para clientes com menor uso.
+  - Oferecer **educação financeira** como diferencial.
+""")
