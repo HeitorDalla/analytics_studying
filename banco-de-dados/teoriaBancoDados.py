@@ -1,12 +1,13 @@
 import sqlite3
 import pandas as pd
 import streamlit as st
+from datetime import datetime
 
-# Conecta (ou cria) o banco de dados SQLite
-conn = sqlite3.connect("produtos.db") # Cria a conexão com o banco de dados e conseguindo acesso aos comandos SQL
-cursor = conn.cursor() # Executor de comandos SQL
+# 📦 Conecta (ou cria) o banco de dados SQLite
+conn = sqlite3.connect("produtos.db", check_same_thread=False)
+cursor = conn.cursor()
 
-# Cria a tabela se não existir (DDL)
+# 🏗️ Criação da tabela produtos (DDL)
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS produtos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,9 +16,20 @@ CREATE TABLE IF NOT EXISTS produtos (
     categoria TEXT NOT NULL
 )
 ''')
+
+# 🏗️ Criação da tabela vendas (DDL)
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS vendas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    produto_id INTEGER NOT NULL,
+    quantidade INTEGER NOT NULL,
+    data_venda TEXT NOT NULL,
+    FOREIGN KEY(produto_id) REFERENCES produtos(id)
+)
+''')
 conn.commit()
 
-# Dados iniciais (DML - inserção se a tabela estiver vazia)
+# 📥 Inserção inicial de produtos (DML)
 cursor.execute("SELECT COUNT(*) FROM produtos")
 if cursor.fetchone()[0] == 0:
     produtos_iniciais = [
@@ -30,25 +42,26 @@ if cursor.fetchone()[0] == 0:
     cursor.executemany("INSERT INTO produtos (nome, preco, categoria) VALUES (?, ?, ?)", produtos_iniciais)
     conn.commit()
 
+# 🎓 Título principal
 st.title("🎓 Fundamentos de SQL com Python + Streamlit + SQLite")
 
-# SELECT * FROM produtos
+# 📋 SELECT * FROM produtos
 st.subheader("📋 Tabela: SELECT * FROM produtos")
 df = pd.read_sql_query("SELECT * FROM produtos", conn)
 st.dataframe(df)
 
-# WHERE - filtro de preço
+# 🔍 Filtro: WHERE preco > ...
 st.subheader("🔍 Filtro: WHERE preco > ...")
 valor_min = st.slider("Preço mínimo", 0.0, 10.0, 5.0, 0.5)
 df_filtro = pd.read_sql_query("SELECT * FROM produtos WHERE preco > ?", conn, params=(valor_min,))
 st.dataframe(df_filtro)
 
-# SELECT com colunas específicas
+# 🧾 SELECT nome, preco
 st.subheader("🧾 SELECT nome, preco")
 df_select = pd.read_sql_query("SELECT nome, preco FROM produtos", conn)
 st.dataframe(df_select)
 
-# Funções agregadas
+# 📊 Funções agregadas
 st.subheader("📊 Funções agregadas (AVG, SUM, COUNT)")
 df_agregado = pd.read_sql_query('''
     SELECT
@@ -59,7 +72,7 @@ df_agregado = pd.read_sql_query('''
 ''', conn)
 st.dataframe(df_agregado)
 
-# GROUP BY
+# 📂 GROUP BY categoria
 st.subheader("📂 GROUP BY categoria")
 df_group = pd.read_sql_query('''
     SELECT categoria, COUNT(*) AS total_produtos, ROUND(AVG(preco), 2) AS media_preco
@@ -68,7 +81,7 @@ df_group = pd.read_sql_query('''
 ''', conn)
 st.dataframe(df_group)
 
-# Inserção de novo produto
+# ➕ Inserir novo produto
 st.subheader("➕ Inserir novo produto")
 with st.form("form_inserir"):
     nome = st.text_input("Nome do produto")
@@ -81,7 +94,33 @@ with st.form("form_inserir"):
                        (nome, preco, categoria))
         conn.commit()
         st.success(f"Produto '{nome}' inserido com sucesso!")
-        st.experimental_rerun()
+        st.rerun()
 
-# Fechando conexão
+# 🧾 Registro de venda
+st.subheader("🛒 Registrar nova venda")
+produtos = pd.read_sql_query("SELECT id, nome FROM produtos", conn)
+produto_nome = st.selectbox("Produto", produtos["nome"])
+quantidade = st.number_input("Quantidade", min_value=1, step=1)
+registrar = st.button("Registrar venda")
+
+if registrar:
+    produto_id = int(produtos[produtos["nome"] == produto_nome]["id"].values[0])
+    data_venda = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    cursor.execute("INSERT INTO vendas (produto_id, quantidade, data_venda) VALUES (?, ?, ?)",
+                   (produto_id, quantidade, data_venda))
+    conn.commit()
+    st.success(f"Venda registrada: {quantidade}x {produto_nome}")
+    st.rerun()
+
+# 📦 Tabela de vendas com JOIN
+st.subheader("📈 Histórico de vendas")
+df_vendas = pd.read_sql_query('''
+    SELECT v.id, p.nome AS produto, v.quantidade, v.data_venda
+    FROM vendas v
+    JOIN produtos p ON v.produto_id = p.id
+    ORDER BY v.data_venda DESC
+''', conn)
+st.dataframe(df_vendas)
+
+# 🔚 Fechando conexão
 conn.close()
