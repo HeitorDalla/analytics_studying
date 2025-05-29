@@ -53,8 +53,8 @@ conn.commit()
 
 # Inserção dos dados da tabela autores
 cursor.execute('select count(*) from autores')
-resultado = cursor.fetchone()[0]
-if resultado == 0:
+
+if cursor.fetchone()[0] == 0:
     produtos_inserir = [
         ('Alice Monteiro',),
         ('Bruno Cardoso',),
@@ -69,6 +69,27 @@ if resultado == 0:
     ]
 
     cursor.executemany('insert into autores (nome) values (?)', produtos_inserir)
+
+    conn.commit()
+
+# Inserção de dados na tabela categorias
+cursor.execute('select count(*) from categorias')
+
+if cursor.fetchone()[0] == 0:
+    categorias_inserir = [
+        ('Romance',),
+        ('Ficção Científica',),
+        ('Biografia',),
+        ('História',),
+        ('Autoajuda',),
+        ('Tecnologia',),
+        ('Fantasia',),
+        ('Suspense',),
+        ('Psicologia',),
+        ('Negócios',)
+    ]
+
+    cursor.executemany('insert into categorias (nome) values (?)', categorias_inserir)
 
     conn.commit()
 
