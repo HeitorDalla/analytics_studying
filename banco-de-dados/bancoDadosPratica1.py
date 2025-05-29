@@ -141,7 +141,7 @@ if cursor.fetchone()[0] == 0:
 st.title('Prática com SQLite, Python e Streamlit')
 
 
-# Todos os livros com nome do livro, autor e da categoria
+# 1 - Todos os livros com nome do livro, autor e da categoria
 st.subheader("Todos os livros com nome do livro, autor e da categoria", divider='grey')
 st.write('\n')
 
@@ -158,7 +158,7 @@ st.dataframe(df)
 st.write('\n')
 
 
-# Filtro de livros por ano de publicação
+# 2 - Filtro de livros por ano de publicação
 st.subheader("Filtro de livros por ano de publicação", divider='grey')
 st.write("\n")
 
@@ -186,7 +186,7 @@ st.dataframe(livroAno)
 st.write('\n')
 
 
-# Quantidade total de livros, de empréstimos e devolvidos
+# 3 - Quantidade total de livros, de empréstimos e devolvidos
 st.subheader("Quantidade total de livros, de empréstimos e devolvidos", divider='grey')
 st.write("\n")
 
@@ -204,3 +204,30 @@ st.write("O total de livros devolvidos é: {}" .format(qtdDevolvido))
 st.write("O total de livros não devolvidos é: {}" .format(qtdNaoDevolvido))
 
 st.write('\n')
+
+# 4 - Número de livros por categoria (agrupado)
+st.subheader("Número de livros por categoria (agrupado)")
+st.write("\n")
+
+# Buscar todas as categorias existentes
+df_categorias = pd.read_sql_query('''
+    select
+        distinct c.nome as `Categoria Livro`
+    from categorias c
+    group by c.nome
+    order by c.nome
+''', conn)
+
+categoriaEscolha = st.selectbox('Nome da categoria', df_categorias['Categoria Livro'])
+
+# Buscar a quantidade de livros na categoria especificada
+df_quantidadeLivros = pd.read_sql_query('''
+    select
+        count(*) as `Quantidade de livros`
+    from livros l
+    inner join categorias c on l.categoria_id = c.id
+    where c.nome = ?
+''', conn, params=(categoriaEscolha,))
+
+st.dataframe(df_quantidadeLivros)
+st.write("\n")
