@@ -94,7 +94,10 @@ plt.xlabel("Life expectancy")
 plt.ylabel("Mortalidade infantil")
 st.pyplot(fig2)
 
-# FAZER A CONCLUSÃO
+st.write('Conclusão da pergunta 3:')
+st.write("As taxas de mortalidade infantil e adulta tem correlação negativas com a expectativa de vida, ou seja, " \
+"quanto maiores as taxas de mortalidade, menor tende a ser a expectativa.")
+st.write('\n')
 
 
 st.subheader('4. A expectativa de vida tem correlação positiva ou negativa com hábitos alimentares, estilo de vida, exercícios, fumo, consumo de álcool etc.', divider='grey')
@@ -123,7 +126,10 @@ plt.xlabel("Desnutrição dos 1-19 anos")
 plt.ylabel("Expectativa de Vida")
 st.pyplot(fig3)
 
-# FAZER CONCLUSÃO
+st.write('Conclusão da pergunta 4:')
+st.write("A expectativa de vida tem pouca relação com o alcool, porém, muita correlação com a desnutrição." \
+"Bons hábitos alimentares tem impactos significativos na expectativa de vida.")
+st.write('\n')
 
 
 st.subheader('5. Qual é o impacto da escolaridade na expectativa de vida dos seres humanos?', divider='grey')
