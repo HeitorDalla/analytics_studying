@@ -237,12 +237,17 @@ st.write("\n")
 # Formulário para registrar um novo livro
 st.subheader("Inserção de um novo Livro", divider='grey')
 
+# Carrega os autores e categorias existentes (dataframe)
+df_autores = pd.read_sql_query('select id, nome from autores order by nome', conn)
+df_categorias = pd.read_sql_query('select id, nome from categorias order by nome', conn)
+
 with st.form("form inserir", clear_on_submit=True):
-    titulo = st.text_input("Nome do produto")
-    autor = st.text_input("Nome do autor")
-    categoria = st.selectbox("Categorias", df_categorias['Categoria Livro'])
+    titulo = st.text_input("Nome do livro")
+    autor = st.selectbox("Nome do autor", df_autores['nome'])
+    categoria = st.selectbox("Categorias", df_categorias['nome'])
     ano = st.text_input("Ano de publicação[AAAA]")
     quantidadeDisponivel = st.number_input("Quantidade disponível", min_value=0.0, step=1.0)
+
     enviar = st.form_submit_button("Inserir")
 
     anoAtual = datetime.now().year
@@ -251,12 +256,17 @@ with st.form("form inserir", clear_on_submit=True):
         if titulo and autor and categoria and ano and quantidadeDisponivel is not None:
             try:
                 anoInteiro = int(ano)
+
                 if 1000 <= anoInteiro <= anoAtual:
+                    # Recuperar os ids correspondentes ao nome
+                    autor_id = int(df_autores[df_autores['nome'] == autor]['id'].values[0])
+                    categoria_id = int(df_categorias[df_categorias['nome'] == categoria]['id'].values[0])
+
                     cursor.execute('''
                         insert into livros
                         (titulo, autor_id, categoria_id, ano, quantidade_disponivel)
                         values (?, ?, ?, ?, ?)
-                    ''', (titulo, autor, categoria, ano, quantidadeDisponivel))
+                    ''', (titulo, autor_id, categoria_id, ano, int(quantidadeDisponivel)))
 
                     conn.commit()
                     st.success("Livro inserido com sucesso!")
