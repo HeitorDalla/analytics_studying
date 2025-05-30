@@ -182,3 +182,33 @@ st.pyplot(fig7)
 st.write('Conclusões da pergunta 7:')
 st.write('Com base na análise gráfica é possível observar que a densidade demográfica não afeta a expectativa de vida.')
 st.write('\n')
+
+
+st.subheader("8. Qual é o impacto da cobertura de imunização na expectativa de vida?", divider='grey')
+
+fig8, ax8 = plt.subplots(figsize=(8, 6))
+sns.regplot(x='Diphtheria', y='Life expectancy', data=df, ax=ax8)
+plt.title('Cobertura de Imunização contra Difteria x Expectativa de Vida')
+plt.ylabel('Cobertura de Difteria (%)')
+plt.ylabel('Expectativa de Vida (anos)')
+st.pyplot(fig8)
+
+fig9, ax9 = plt.subplots(figsize=(8, 6))
+sns.regplot(x='Polio', y='Life expectancy', data=df, ax=ax9)
+plt.title('Cobertura de Imunização contra Polio x Expectativa de Vida')
+plt.ylabel('Cobertura de Polio (%)')
+plt.ylabel('Expectativa de Vida (anos)')
+st.pyplot(fig9)
+
+fig10, ax10 = plt.subplots(figsize=(8, 6))
+sns.regplot(x='Hepatitis B', y='Life expectancy', data=df, ax=ax10)
+plt.title('Cobertura de Imunização contra Hepatitis B x Expectativa de Vida')
+plt.ylabel('Cobertura de Hepatitis B (%)')
+plt.ylabel('Expectativa de Vida (anos)')
+st.pyplot(fig10)
+
+st.write('Conclusões da pergunta 7:')
+st.write('A análise mostra uma correlação positiva entre a cobertura de imunização infantil (Hepatite B, Poliomielite e Difteria) e a expectativa de vida. ' \
+'Isso indica que quanto maior o alcance da vacinação em uma população, maior tende a ser a longevidade média das pessoas, ' \
+'reforçando a importância de programas nacionais de imunização.')
+st.write('\n')
