@@ -285,7 +285,7 @@ with st.form("form alterar autor", clear_on_submit=True):
     autorMudar = st.selectbox("Autores", df_autores['nome'])
     novoAutor = st.text_input("Nome do Autor")
 
-    enviar = st.form_submit_button("Enviar")
+    enviar = st.form_submit_button("Editar")
 
     if enviar:
         if novoAutor.strip():
@@ -302,3 +302,34 @@ with st.form("form alterar autor", clear_on_submit=True):
             st.success("Nome do autor alterado!")
         else:
             st.error("Preencha todos os campos corretamente!")
+
+
+# 7 - Formulário para editar um livro (alterar titulo, categoria, quantidade disponivel
+st.subheader("Editar todas as informações de um livro")
+
+df_livroAlterar = pd.read_sql_query("select * from livros order by id", conn)
+df_categorias = pd.read_sql_query("select * from categorias order by nome", conn)
+
+with st.form("Editar informações do livro", clear_on_submit=True):
+    livros = st.selectbox("Livros", df_livroAlterar['titulo'])
+    tituloMudar = st.text_input("Título")
+    categoriaMudar = st.selectbox("Categorias", df_categorias['nome'])
+    quantidadeMudar = st.number_input("Quantidade disponível", min_value=1, step=1)
+
+    enviar = st.form_submit_button("Editar")
+
+    if enviar:
+        if livros and tituloMudar and quantidadeMudar is not None:
+            indiceLivroMudar = int(df_livroAlterar[df_livroAlterar['titulo'] == livros]['id'].values[0])
+            indiceCategoriaMudar = int(df_categorias[df_categorias['nome'] == categoriaMudar]['id'].values[0])
+
+            cursor.execute('''
+                update livros
+                set titulo = ?, categoria_id = ?, quantidade_disponivel = ?
+                where id = ?
+            ''', (tituloMudar, indiceCategoriaMudar, quantidadeMudar, indiceLivroMudar))
+
+            conn.commit()
+            st.success("Informações do livro alterado!")
+        else:
+            st.write("Erro ao validar campos!")
