@@ -20,7 +20,25 @@ df = df[df['Status'] == 'Developing']
 st.header("Estatísticas sobre a expectativa de vida dos Países")
 
 
-st.subheader('1. Os vários fatores de previsão inicialmente escolhidos realmente afetam a expectativa devida?', divider='grey') 
+st.subheader('1. Os vários fatores de previsão inicialmente escolhidos realmente afetam a expectativa devida?', divider='grey')
+
+numeric_df = df.select_dtypes(include='number')
+correlation = numeric_df.corr()['Life expectancy'].sort_values(ascending=False)
+
+st.write("Maiores correlações positivas com expectativa de vida:")
+st.write(correlation)
+
+st.write("Quais variáveis realmente afetam a expectativa de vida?")
+st.write("Schooling anos de estudo: Educação está diretamente ligada a melhores condições de vida e saúde.")
+st.write("Polio / Diphtheria / Hepatitis B (vacinação): Alta cobertura vacinal previne doenças e eleva a expectativa de vida.")
+st.write("GDP per capita: PIB per capita mais alto geralmente reflete mais investimento em saúde e bem-estar.")
+st.write("BMI (IMC médio da população): Indica boa nutrição em níveis adequados.")
+
+st.write('Conclusão da pergunta 1:')
+st.write("Os dados demonstram que diversos fatores de previsão influenciam significativamente a expectativa de vida. " \
+"Ao calcular a correlação de Pearson entre essas variáveis e a expectativa de vida, observa-se tanto relações positivas quanto negativas. " \
+"Isso indica que certas variáveis estão fortemente associadas a aumentos ou reduções na longevidade da população")
+st.write('\n')
 
 
 st.subheader('2. Um país com menor expectativa de vida (<65) deve aumentar seus gastos com saúde para melhorar sua expectativa de vida média?', divider='grey')
