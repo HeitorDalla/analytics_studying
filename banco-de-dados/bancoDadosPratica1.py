@@ -237,7 +237,7 @@ st.write("\n")
 # Formulário para registrar um novo livro
 st.subheader("Inserção de um novo Livro", divider='grey')
 
-with st.form("form inserir"):
+with st.form("form inserir", clear_on_submit=True):
     titulo = st.text_input("Nome do produto")
     autor = st.text_input("Nome do autor")
     categoria = st.selectbox("Categorias", df_categorias['Categoria Livro'])
@@ -252,7 +252,13 @@ with st.form("form inserir"):
             try:
                 anoInteiro = int(ano)
                 if 1000 <= anoInteiro <= anoAtual:
-                    # logica para prosseguir
+                    cursor.execute('''
+                        insert into livros
+                        (titulo, autor_id, categoria_id, ano, quantidade_disponivel)
+                        values (?, ?, ?, ?, ?)
+                    ''', (titulo, autor, categoria, ano, quantidadeDisponivel))
+
+                    conn.commit()
                     st.success("Livro inserido com sucesso!")
                 else:
                     st.error("Livro com ano de lançamento acima do esperado!")
