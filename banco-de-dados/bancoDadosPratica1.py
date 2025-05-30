@@ -145,7 +145,7 @@ st.title('Prática com SQLite, Python e Streamlit')
 st.subheader("Todos os livros com nome do livro, autor e da categoria", divider='grey')
 st.write('\n')
 
-df = pd.read_sql_query('''
+df_filtroLivro = pd.read_sql_query('''
     select
         l.titulo as `Nome do livro`,
         a.nome as `Nome do autor`,
@@ -154,7 +154,7 @@ df = pd.read_sql_query('''
     inner join categorias c on l.categoria_id = c.id
     inner join autores a on l.autor_id = a.id
 ''', conn)
-st.dataframe(df)
+st.dataframe(df_filtroLivro)
 st.write('\n')
 
 
@@ -232,3 +232,31 @@ df_quantidadeLivros = pd.read_sql_query('''
 
 st.dataframe(df_quantidadeLivros)
 st.write("\n")
+
+
+# Formulário para registrar um novo livro
+st.subheader("Inserção de um novo Livro", divider='grey')
+
+with st.form("form inserir"):
+    titulo = st.text_input("Nome do produto")
+    autor = st.text_input("Nome do autor")
+    categoria = st.selectbox("Categorias", df_categorias['Categoria Livro'])
+    ano = st.text_input("Ano de publicação[AAAA]")
+    quantidadeDisponivel = st.number_input("Quantidade disponível", min_value=0.0, step=1.0)
+    enviar = st.form_submit_button("Inserir")
+
+    anoAtual = datetime.now().year
+
+    if enviar:
+        if titulo and autor and categoria and ano and quantidadeDisponivel is not None:
+            try:
+                anoInteiro = int(ano)
+                if 1000 <= anoInteiro <= anoAtual:
+                    # logica para prosseguir
+                    st.success("Livro inserido com sucesso!")
+                else:
+                    st.error("Livro com ano de lançamento acima do esperado!")
+            except ValueError:
+                st.error("O ano deve ser numérico!")
+        else:
+            st.error("Preencha todos os campos corretamente!")
