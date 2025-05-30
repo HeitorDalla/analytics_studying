@@ -234,14 +234,14 @@ st.dataframe(df_quantidadeLivros)
 st.write("\n")
 
 
-# Formulário para registrar um novo livro
+# 5 - Formulário para registrar um novo livro
 st.subheader("Inserção de um novo Livro", divider='grey')
 
 # Carrega os autores e categorias existentes (dataframe)
 df_autores = pd.read_sql_query('select id, nome from autores order by nome', conn)
 df_categorias = pd.read_sql_query('select id, nome from categorias order by nome', conn)
 
-with st.form("form inserir", clear_on_submit=True):
+with st.form("form inserir livro", clear_on_submit=True):
     titulo = st.text_input("Nome do livro")
     autor = st.selectbox("Nome do autor", df_autores['nome'])
     categoria = st.selectbox("Categorias", df_categorias['nome'])
@@ -274,5 +274,31 @@ with st.form("form inserir", clear_on_submit=True):
                     st.error("Livro com ano de lançamento acima do esperado!")
             except ValueError:
                 st.error("O ano deve ser numérico!")
+        else:
+            st.error("Preencha todos os campos corretamente!")
+
+
+# 6 - Formulário para editar um autor (alterar o nome)
+st.subheader("Editar um autor", divider='grey')
+
+with st.form("form alterar autor", clear_on_submit=True):
+    autorMudar = st.selectbox("Autores", df_autores['nome'])
+    novoAutor = st.text_input("Nome do Autor")
+
+    enviar = st.form_submit_button("Enviar")
+
+    if enviar:
+        if novoAutor.strip():
+            # Recupear o id do autor
+            autor_id = int(df_autores[df_autores['nome'] == autorMudar]['id'].values[0])
+            
+            cursor.execute('''
+                update autores
+                set nome = ?
+                where id = ?
+            ''', (novoAutor, autor_id))
+
+            conn.commit()
+            st.success("Nome do autor alterado!")
         else:
             st.error("Preencha todos os campos corretamente!")
