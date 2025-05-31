@@ -7,6 +7,7 @@ import streamlit as st
 
 conn = sqlite3.connect('banco-de-dados/ecommerce.db') # Criando a conexão com banco de dados
 cursor = conn.cursor() # Executor de comandos
+conn.execute("PRAGMA foreign_keys = ON")
 
 # Criando a tabela de autores
 cursor.execute('''
@@ -333,3 +334,24 @@ with st.form("Editar informações do livro", clear_on_submit=True):
             st.success("Informações do livro alterado!")
         else:
             st.write("Erro ao validar campos!")
+
+
+# 8 - Formulário para Deletar um livro
+st.subheader("Formulário para deletar um livro")
+
+df_livros = pd.read_sql_query("select * from livros order by titulo", conn)
+
+with st.form("Deletar um livro", clear_on_submit=True):
+    livros = st.selectbox("Livros", df_livros['titulo'])
+
+    deletar = st.form_submit_button("Deletar")
+
+    if deletar:
+        livroDeletar = df_livros[df_livros['titulo'] == livros]['id'].values[0]
+
+        cursor.execute('''
+            delete from livros where id = ?
+        ''', (livroDeletar,))
+
+        conn.commit()
+        st.success("Livro deletado com sucesso!")
