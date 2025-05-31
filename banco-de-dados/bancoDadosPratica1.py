@@ -337,9 +337,10 @@ with st.form("Editar informações do livro", clear_on_submit=True):
 
 
 # 8 - Formulário para Deletar um livro
-st.subheader("Formulário para deletar um livro")
+st.subheader("Formulário para deletar um livro", divider='grey')
 
-df_livros = pd.read_sql_query("select * from livros order by titulo", conn)
+df_livros = pd.read_sql_query("select * from livros order by titulo asc", conn)
+df_livros = df_livros.reset_index(drop=True)
 
 with st.form("Deletar um livro", clear_on_submit=True):
     livros = st.selectbox("Livros", df_livros['titulo'])
@@ -347,7 +348,8 @@ with st.form("Deletar um livro", clear_on_submit=True):
     deletar = st.form_submit_button("Deletar")
 
     if deletar:
-        livroDeletar = df_livros[df_livros['titulo'] == livros]['id'].values[0]
+        livroDeletar = int(df_livros[df_livros['titulo'] == livros]['id'].values[0])
+        st.write(type(livroDeletar))
 
         cursor.execute('''
             delete from livros where id = ?
