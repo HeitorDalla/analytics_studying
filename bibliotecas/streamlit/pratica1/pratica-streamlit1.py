@@ -154,3 +154,88 @@ st.write("A maior nota de ciencias é a cidade: {}" .format(cidadeMaiorNotaCien[
 st.write("A menor nota de ciencias é a cidade: {}" .format(cidadeMaiorNotaCien['cidade'].tail(1).squeeze()))
 
 
+# Visualizações
+
+st.subheader("Visualização das notas por matéria")
+
+# Notas de Matemática
+fig1, ax1 = plt.subplots()
+plt.hist(x=df['nota_matematica'], bins=20)
+plt.title("Visualização da nota de matemática")
+plt.xlabel("Nota")
+plt.ylabel("Frequência")
+st.pyplot(fig1)
+
+# Notas de Português
+fig2, ax2 = plt.subplots()
+plt.hist(x=df['nota_portugues'], bins=20)
+plt.title("Visualização da nota de portugues")
+plt.xlabel("Nota")
+plt.ylabel("Frequência")
+plt.show()
+st.pyplot(fig2)
+
+# Notas de Ciências
+fig3, ax3 = plt.subplots()
+plt.hist(x=df['nota_ciencias'], bins=20)
+plt.title("Visualização da nota de ciencias")
+plt.xlabel("Nota")
+plt.ylabel("Frequência")
+plt.show()
+st.pyplot(fig3)
+
+# Gere um boxplot comparando notas de português por série
+st.subheader("Notas de cada matéria por série")
+
+fig4, ax4 = plt.subplots()
+sns.boxplot(x='nota_matematica', y='serie', data=df, ax=ax4)
+plt.title("Notas de matemática por série")
+plt.show()
+st.pyplot(fig4)
+
+# Gere um boxplot comparando notas de matemática por série
+fig5, ax5 = plt.subplots()
+sns.boxplot(x='nota_portugues', y='serie', data=df, ax=ax5)
+plt.title("Notas de português por série")
+plt.show()
+st.pyplot(fig5)
+
+# Gere um boxplot comparando notas de ciências por série
+fig6, ax6 = plt.subplots()
+sns.boxplot(x='nota_ciencias', y='serie', data=df, ax=ax6)
+plt.title("Notas de ciências")
+plt.show()
+st.pyplot(fig6)
+
+# Crie um gráfico de barras com a quantidade de alunos por cidade
+st.subheader("Quantidade de alunos por cidade")
+
+fig7, ax7 = plt.subplots()
+sns.countplot(x='cidade', data=df, ax=ax7)
+plt.title("Frequência de alunos por cidade")
+plt.xlabel("Cidade")
+plt.ylabel("Quantidade de Alunos")
+plt.xticks(rotation=45)
+plt.show()
+st.pyplot(fig7)
+
+# Faça um gráfico de dispersão entre frequencia_% e nota por matéria
+st.subheader("Gráfico de frequência por matéria")
+
+fig8, ax8 = plt.subplots()
+sns.scatterplot(x='frequencia_%', y='nota_matematica', data=df, ax=ax8)
+plt.title("Dispersão por nota de matemática")
+plt.show()
+st.pyplot(fig8)
+
+fig9, ax9 = plt.subplots()
+sns.scatterplot(x='frequencia_%', y='nota_portugues', data=df, ax=ax9)
+plt.title("Dispersão por nota de portugues")
+plt.show()
+st.pyplot(fig9)
+
+fig10, ax10 = plt.subplots()
+sns.scatterplot(x='frequencia_%', y='nota_ciencias', data=df, ax=ax10)
+plt.title("Dispersão por nota de ciencias")
+plt.show()
+st.pyplot(fig10)
