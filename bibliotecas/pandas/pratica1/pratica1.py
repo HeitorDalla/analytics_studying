@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Ler o arquivo vendas.csv
-df = pd.read_csv('bibliotecas/pandas/vendas.csv', sep=',', encoding='utf-8', parse_dates=['data']) # parse_dates é uma biblioteca do pandas para alterar 'data'
+df = pd.read_csv('bibliotecas/pandas/pratica1/vendas.csv', sep=',', encoding='utf-8', parse_dates=['data']) # parse_dates é uma biblioteca do pandas para alterar 'data'
 
 # Lendo o total de vendas dentro do meu arquivo
 totalVendas = len(df)
@@ -29,5 +29,5 @@ print("As cinco maiores vendas são: \n{}" .format(cincoMaioresVendas))
 abril = df.loc[df['data'].dt.month == 4]
 relatorio_abril = abril.copy() # Cópia
 
-relatorio_abril.to_csv('bibliotecas/pandas/relatorioAbril.csv', index=False)
+relatorio_abril.to_csv('bibliotecas/pandas/pratica1/relatorioAbril.csv', index=False)
 print(relatorio_abril)
