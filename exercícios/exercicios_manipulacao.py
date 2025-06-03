@@ -65,3 +65,55 @@ def exercicio2():
 
 print(exercicio2())
 
+# EXERCÍCIO 3 - INTERMEDIÁRIO
+"""
+Você tem uma lista de dicionários representando estudantes.
+Crie uma função que retorne:
+- Conjunto de todas as disciplinas cursadas
+- Dicionário com média de notas por disciplina
+- Lista dos 3 melhores estudantes (por média geral)
+"""
+
+def exercicio3():
+    estudantes = [
+        {"nome": "João", "notas": {"Matemática": 8.5, "Português": 7.0, "História": 9.0}},
+        {"nome": "Maria", "notas": {"Matemática": 9.0, "Português": 8.5, "Física": 8.0}},
+        {"nome": "Pedro", "notas": {"História": 7.5, "Física": 9.5, "Português": 8.0}},
+        {"nome": "Ana", "notas": {"Matemática": 9.5, "História": 8.5, "Física": 9.0}}
+    ]
+
+    disciplinas = set()
+    somaNotas = {}
+    contNotas = {}
+    
+    for estudante in estudantes:        
+        for materia, nota in estudante['notas'].items():
+            disciplinas.add(materia)
+
+            if materia not in somaNotas:
+                somaNotas[materia] = 0
+                contNotas[materia] = 0
+            
+            somaNotas[materia] += nota
+            contNotas[materia] += 1
+
+    mediaNotaDisciplina = {}
+
+    for materia in disciplinas:
+        mediaNotaDisciplina[materia] = somaNotas[materia] / contNotas[materia]
+
+    # média de todos os estudantes
+    mediaEstudantes = []
+    for estudante in estudantes:
+        notas = estudante['notas'].values()
+        media = sum(notas) / len(notas)
+
+        mediaEstudantes.append((estudante['nome'], media))
+
+    # os três com melhores notas
+    melhores = sorted(mediaEstudantes, key=lambda x: x[1], reverse=True)[:3]
+                
+    return disciplinas, mediaNotaDisciplina, melhores
+
+print(exercicio3())
+
