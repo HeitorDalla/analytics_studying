@@ -45,8 +45,8 @@ print(listaFrutras)
 # 11
 stringTeste = 'python,java,c++'
 
-stringTeste.split(' ')
-print(stringTeste)
+lista = stringTeste.split(',')
+print(lista)
 
 # 12
 listaJoin = ["py", "js", "rb"]
