@@ -117,3 +117,33 @@ def exercicio3():
 
 print(exercicio3())
 
+# EXERCÍCIO 4 - INTERMEDIÁRIO
+"""
+Crie um sistema de inventário. Dada uma lista de transações,
+implemente funções para:
+- Encontrar itens com estoque baixo (< 10)
+- Calcular valor total do inventário
+"""
+
+def exercicio4():
+    transacoes = [
+        {"item": "notebook", "tipo": "entrada", "quantidade": 50, "preco": 2500.00},
+        {"item": "mouse", "tipo": "entrada", "quantidade": 100, "preco": 25.00},
+        {"item": "notebook", "tipo": "saida", "quantidade": 15, "preco": 2500.00},
+        {"item": "teclado", "tipo": "entrada", "quantidade": 5, "preco": 80.00},
+        {"item": "mouse", "tipo": "saida", "quantidade": 95, "preco": 25.00}
+    ]
+    
+    itensEstoqueBaixo = []
+    totalInventario = 0
+
+    for transacao in transacoes:
+        if (transacao['quantidade'] < 10):
+            itensEstoqueBaixo.append(transacao['item'])
+        
+        totalInventario += totalInventario + transacao['preco']
+    
+    return itensEstoqueBaixo, totalInventario
+
+print(exercicio4())
+
