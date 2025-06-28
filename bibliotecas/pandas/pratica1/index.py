@@ -30,4 +30,3 @@ abril = df.loc[df['data'].dt.month == 4]
 relatorio_abril = abril.copy() # Cópia
 
 relatorio_abril.to_csv('bibliotecas/pandas/pratica1/relatorioAbril.csv', index=False)
-print(relatorio_abril)
