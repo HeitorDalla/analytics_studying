@@ -2,7 +2,6 @@
 #  que preveja a classificação de eficiência energética de edifícios com base em características como
 #  área de parede, área de telhado, altura total, etc.
 
-
 # Import necessary libraries
 import pandas as pd
 import numpy as np
