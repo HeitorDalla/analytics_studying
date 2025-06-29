@@ -3,6 +3,8 @@ import pandas as pd
 # Leitura do arquivo
 df = pd.read_csv('bibliotecas/pandas/pratica2/feedbacks.csv', sep=',', encoding='utf-8')
 
+print(df)
+
 # Cálculo da média por curso
 mediaNotas = df.groupby('curso')['nota'].mean().round(2)
 
