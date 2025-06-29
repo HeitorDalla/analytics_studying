@@ -54,6 +54,68 @@ tabelaComparativa = pd.crosstab(dataframe['data'], dataframe['produto'], margins
 tabelaComparativa.to_csv('bibliotecas/pandas/teoria/tabelaComparativa.csv')
 
 # Groupby
-mediaPreco = dataframe.groupby(['produto']).mean()
+print('----------------------------------------')
+
+mediaPreco = dataframe.groupby('produto')['preco'].mean()
 
 print(mediaPreco)
+
+print('----------------------------------------')
+
+# Manipulação dos dados
+dataframe2 = pd.read_csv("bibliotecas/pandas/teoria/car-sales.csv")
+
+print(dataframe2)
+
+print(dataframe2.describe())
+
+print(dataframe2.info())
+
+print('----------------------------------------')
+
+# Transformar a coluna em inteiro
+
+dataframe2['Price'] = (dataframe2['Price'].str.replace(r'[\$,\.]', '', regex=True).astype(int) / 100).astype(int)
+
+print(dataframe2)
+
+print('----------------------------------------')
+
+# Trabalhar com dados faltantes
+
+dataframe3 = pd.read_csv('bibliotecas/pandas/teoria/car-sales-missing-data.csv')
+
+print(dataframe3)
+
+print('----------------------------------------')
+
+# Substituir os valores ausentes
+
+# dataframe3['Doors'] = dataframe3['Doors'].fillna(0)
+
+# dataframe3['Price'] = dataframe3['Price'].fillna(0)
+
+# dataframe3['Odometer'] = dataframe3['Odometer'].fillna(0)
+
+# dataframe3['Price'] = (dataframe3['Price']
+#                        .astype(str)
+#                        .str.replace(r'[\$,\.]', '', regex=True)
+#                        ).astype(int)
+
+# print(dataframe3)
+
+print('----------------------------------------')
+
+# Excluir os valores ausentes
+
+# dataframe3 = dataframe3.dropna()
+
+print(dataframe3)
+
+print('----------------------------------------')
+
+# Colunas especificas
+
+dataframe3 = dataframe3.dropna(subset=['Price'])
+
+print(dataframe3)

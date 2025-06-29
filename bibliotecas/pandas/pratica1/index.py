@@ -3,6 +3,8 @@ import pandas as pd
 # Ler o arquivo vendas.csv
 df = pd.read_csv('bibliotecas/pandas/pratica1/vendas.csv', sep=',', encoding='utf-8', parse_dates=['data']) # parse_dates é uma biblioteca do pandas para alterar 'data'
 
+print(df)
+
 # Lendo o total de vendas dentro do meu arquivo
 totalVendas = len(df)
 print(totalVendas)
