@@ -1,4 +1,4 @@
-# 🐍 Estudos Python
+# 🐍 Estudos Analytics
 Este repositório contém uma coleção de exercícios, projetos e análises de dados desenvolvidos durante minha jornada de aprendizado em Python. Aqui você encontrará desde conceitos básicos da linguagem até análises complexas de dados e visualizações.
 
 ## 📚 Conteúdo do Repositório
